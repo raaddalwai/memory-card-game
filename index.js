@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", loadHome)
 
-img = new Image()
-img.src = "./images/prasad-sir.jpeg"
 chars = ["A", "B", "C", "D", "E", "F", "G", "H"]
 
 level1 = {
@@ -13,14 +11,25 @@ level1 = {
     "F": "./images/jaykant.png",
     "G": "./images/bichukale.png",
     "H": "./images/sunil.png",
-
+    
 }
 
 let currentGridLength = 4;
 let currentGridWidth = 4;
 let gameOver = false;
 
+let timerInterval = null;
+let timerRemaining = 0;
+let timerDuration = 60;
+
+let memoryTime = 1000
+
+
 function resetGame(gridLength, gridWidth){
+    currentGridLength = gridLength
+    timerDuration = 60*(0.9**Number(difficultyRange.value))
+
+    currentGridWidth = gridWidth
     gameArea.innerHTML=""
     gameArea.style.width = `50%`
     scoreElem.innerText = "Score: 0"
@@ -91,7 +100,7 @@ function resetGame(gridLength, gridWidth){
     currentGridWidth = gridWidth
     gameOver = false
     // start timer scaled to grid area
-    const duration = Math.max(20, Math.min(120, gridLength * gridWidth * 4))
+    const duration = timerDuration
     startTimer(duration)
 } 
 
@@ -176,7 +185,7 @@ function cellClick(event) {
                         timeOutActive = false
                         }
                         
-                    }, 1000);
+                    }, 1000*(0.9**Number(difficultyRange.value)));
                     
                 }
             }else{
@@ -228,9 +237,6 @@ function quit(){
 
 // Timer implementation (non-intrusive UI)
 // uses SVG circle radius 52 (circumference ~ 326.726)
-let timerInterval = null;
-let timerRemaining = 0;
-let timerDuration = 60;
 
 function startTimer(seconds){
     stopTimer()
